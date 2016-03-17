@@ -37,32 +37,21 @@ void readInPeaks(std::vector<Row*>&heatmap, std::string peakfile, int binsize, i
 	ifstream file;
 	file.open(peakfile);
 
-//	cerr << "debug(): readInPeaks(): binsize is " << binsize << endl;
-
 	string line;
+
 	while(getline(file, line) && !file.bad())
 	{
 		string chr;
 		int start, end;
-//		string line;
-//		getline(file, line);
-
-//		cerr << "Line is " << line << endl;
 
 		stringstream ss(line);
-
-//		if (!(ss >> chr >> start >> end))
-//			break;
 		ss >> chr >> start >> end;
 
 		int center = (start + end) / 2;
 
-//		cerr << "Debug: readInPeaks(): chr " << chr << " start " << start << " end " << end << endl;
-
 		heatmap.push_back(new Row(center, binsize, heatwidth/binsize, chr, windowsize/binsize, shift/binsize));		
 	}	
 
-//	cerr << "segfault?" << endl;
 	file.close();
 }
 
@@ -92,8 +81,6 @@ void readInWig(std::unordered_map<std::string, vector<WigPeak>>& wigpeaks, std::
 			string spanstr = line.substr(pos_start + 1);
 			stringstream conv(spanstr);
 			conv >> span;
-			
-//			cerr << "debug: chr is " << chr << " span is " << span << endl;
 
 			if (chr.compare(prev_chr) != 0)
 			{
@@ -108,7 +95,6 @@ void readInWig(std::unordered_map<std::string, vector<WigPeak>>& wigpeaks, std::
 			double value;
 	
 			ss >> pos >> value;
-//			cerr << "debug: chr is " << chr << " pos is " << pos << " value is " << value << endl;
 	
 			WigPeak tmp;
 			tmp.start = pos;
@@ -116,7 +102,6 @@ void readInWig(std::unordered_map<std::string, vector<WigPeak>>& wigpeaks, std::
 			tmp.value = value;
 			wigpeaks[chr].push_back(tmp);	
 		}
-
 	}
 	
 	file.close();
@@ -133,17 +118,11 @@ int bsearch(vector<WigPeak>& array, int start)
 		med_index = (max_index + min_index) / 2;
 		
 		if (array[med_index].start < start)
-		{
 			min_index = med_index + 1;
-		}
 		else if (array[med_index].start > start)
-		{
 			max_index = med_index - 1;
-		}
 		else
-		{
 			return med_index;
-		}
 	}
 
 	if (med_index > 0 && array[med_index - 1].end > start)
