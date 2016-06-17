@@ -63,16 +63,30 @@ double Row::smooth(int sortplace, int sortwidth)
 	{
 		double tmp = ring_buf[i % smooth_win];
 		curr_sum = curr_sum - tmp + array[i];
+
+		if (round(curr_sum) < 0)
+		{
+			cerr << "curr_sum is < 0: " << curr_sum << " tmp is " << tmp << " array[i] is " << array[i] << " prev curr_sum was " << (curr_sum + tmp - array[i]) << endl;
+			throw 1;
+		}
+
 		ring_buf[i % smooth_win] = array[i];
-		array[i] = (double)curr_sum / smooth_win;
+		array[i] = round((double)curr_sum / smooth_win);
 	}
 
 	for (int j = num_bins - num_bins % smooth_shift; j < num_bins; j++)
 	{
 		double tmp = ring_buf[j % smooth_win];
 		curr_sum = curr_sum - tmp + array[j];
+
+		if (round(curr_sum) < 0)
+		{
+			cerr << "curr_sum is < 0: " << curr_sum << " tmp is " << tmp << " array[j] is " << array[j] << " prev curr_sum was " << (curr_sum + tmp - array[j]) << endl;
+			throw 1;
+		}
+	
 		ring_buf[j % smooth_win] = 0.0;
-		array[j] = (double)curr_sum / smooth_win;
+		array[j] = round((double)curr_sum / smooth_win);
 	}
 
 	double sort_num = 0.0;
@@ -96,7 +110,14 @@ int Row::getStartPos(void)
 void Row::printToFP(std::ofstream& file)
 {
 	for (int i = 0; i < num_bins; i++)
-		file << array[i] << " ";
+		file << array[i] << "\t";
 
 	file << endl;
+}
+
+double round(double num)
+{
+	int rounded = num * 1000000;
+
+	return rounded / (double) 1000000.0;
 }

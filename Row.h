@@ -5,6 +5,8 @@
 #include<string>
 #include<fstream>
 
+double round(double num);
+
 class Row 
 {
 	public:
@@ -26,5 +28,6 @@ class Row
 
 	double * array;
 };
+
 
 #endif

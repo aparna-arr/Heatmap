@@ -99,7 +99,7 @@ void readInWig(std::unordered_map<std::string, vector<WigPeak>>& wigpeaks, std::
 			WigPeak tmp;
 			tmp.start = pos;
 			tmp.end = pos + span;
-			tmp.value = value;
+			tmp.value = round(value);
 			wigpeaks[chr].push_back(tmp);	
 		}
 	}
